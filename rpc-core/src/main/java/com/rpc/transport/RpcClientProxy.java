@@ -13,12 +13,11 @@ import java.lang.reflect.Proxy;
 @Slf4j
 @NoArgsConstructor
 public class RpcClientProxy implements InvocationHandler {
-    private String host;
-    private Integer port;
+    private RpcClient client;
 
-    public RpcClientProxy(String host, Integer port) {
-        this.host = host;
-        this.port = port;
+
+    public RpcClientProxy(RpcClient client) {
+        this.client = client;
     }
 
     @Override
@@ -29,8 +28,7 @@ public class RpcClientProxy implements InvocationHandler {
                 .parameters(args)
                 .paramTypes(method.getParameterTypes())
                 .build();
-        RpcClient rpcClient = new SocketClient(host, port);
-        return ((RpcResponse<?>) rpcClient.sendRequest(rpcRequest)).getData();
+        return ((RpcResponse<?>) client.sendRequest(rpcRequest)).getData();
     }
 
     @SuppressWarnings("unchecked")
