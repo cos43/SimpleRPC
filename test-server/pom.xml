@@ -8,7 +8,13 @@
         <artifactId>My-Rpc-Framework</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-
+    <repositories>
+        <repository>
+            <id>aliyunmaven</id>
+            <name>aliyunmaven</name>
+            <url>https://maven.aliyun.com/repository/public</url>
+        </repository>
+    </repositories>
     <artifactId>test-server</artifactId>
 
     <properties>
