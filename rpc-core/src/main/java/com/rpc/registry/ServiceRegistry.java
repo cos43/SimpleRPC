@@ -1,6 +1,9 @@
 package com.rpc.registry;
 
+import com.alibaba.nacos.api.exception.NacosException;
+
+import java.net.InetSocketAddress;
+
 public interface ServiceRegistry {
-    <T> void register(T service);
-    Object getService(String serviceName);
+    void register(String serviceName, InetSocketAddress inetSocketAddress);
 }
