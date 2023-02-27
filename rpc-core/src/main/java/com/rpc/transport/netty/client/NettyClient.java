@@ -14,6 +14,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.AttributeKey;
 import lombok.extern.slf4j.Slf4j;
 
+
 @Slf4j
 public class NettyClient implements RpcClient {
     private final String host;
@@ -33,11 +34,13 @@ public class NettyClient implements RpcClient {
                 .option(ChannelOption.SO_KEEPALIVE, true)
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
-                    protected void initChannel(SocketChannel channel) throws Exception {
+                    protected void initChannel(SocketChannel channel)  {
                         ChannelPipeline pipeline = channel.pipeline();
-                        pipeline.addLast(new CommonDecoder())
-                                .addLast(new CommonEncoder(new JsonSerializer()))
-                                .addLast(new NettyClientHandler());
+                        pipeline.addLast(
+                                new CommonEncoder(new JsonSerializer()),
+                                new CommonDecoder(),
+                                new NettyClientHandler()
+                        );
 
                     }
                 });
@@ -48,18 +51,18 @@ public class NettyClient implements RpcClient {
         try {
             ChannelFuture future = bootstrap.connect(host, port);
             log.info("客户端连接到服务器 {}:{}", host, port);
-            Channel channel=future.channel();
+            Channel channel = future.channel();
             if (channel != null) {
                 channel.writeAndFlush(request).addListener(future1 -> {
                     if (future1.isSuccess()) {
                         log.info(String.format("客户端发送消息: %s", request.toString()));
-                    }else{
+                    } else {
                         log.error("发送消息时有错误发生: ", future1.cause());
                     }
                 });
                 channel.closeFuture().sync();
-                AttributeKey<RpcResponse> key=AttributeKey.valueOf("rpcResponse");
-                RpcResponse rpcResponse=channel.attr(key).get();
+                AttributeKey<RpcResponse> key = AttributeKey.valueOf("rpcResponse");
+                RpcResponse rpcResponse = channel.attr(key).get();
                 return rpcResponse.getData();
             }
         } catch (InterruptedException e) {
