@@ -1,12 +1,13 @@
 package entity;
 
-import lombok.Data;
-import lombok.Getter;
+import lombok.*;
 
 import java.io.Serializable;
 
 @Data
-@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class RpcResponse<T> implements Serializable {
     private Integer statusCode;
     private String message;

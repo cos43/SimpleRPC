@@ -1,13 +1,12 @@
 package entity;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
+import lombok.*;
 
 import java.io.Serializable;
 
 @Data
-@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class RpcRequest implements Serializable {
     private String interfaceName;
